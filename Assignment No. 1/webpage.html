@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Menubar Styles */
+        nav {
+            background: #2c3e50;
+            padding: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            transition: background 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background: #34495e;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: 70vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        /* Sidebar Styles */
+        aside {
+            width: 25%;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .sidebar-item h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content Styles */
+        main {
+            width: 75%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .content-box {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .content-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .content-box h2 {
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .content-box p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            aside, main {
+                width: 100%;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">MyWebsite</div>
+        <div class="social-links">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="Instagram">📷</a>
+        </div>
+    </header>
+
+    <!-- Menubar -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <div class="sidebar-item">
+                <h3>Quick Links</h3>
+                <p>Access important pages and resources quickly.</p>
+            </div>
+            <div class="sidebar-item">
+                <h3>Recent Posts</h3>
+                <p>Stay updated with our latest blog articles and news.</p>
+            </div>
+            <div class="sidebar-item">
+                <h3>Contact Info</h3>
+                <p>Email: riddheshsawant2@gmail.com | Phone: 8355913169</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <article class="content-box">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop" alt="Technology Innovation">
+                <h2>Digital Transformation</h2>
+                <p>Explore how modern businesses are leveraging cutting-edge technology to revolutionize their operations and stay ahead in competitive markets. Our comprehensive guide covers the latest trends and strategies.</p>
+            </article>
+
+            <article class="content-box">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop" alt="Team Collaboration">
+                <h2>Team Collaboration</h2>
+                <p>Effective teamwork is the cornerstone of success. Discover proven methodologies and tools that enhance communication, productivity, and innovation within your organization.</p>
+            </article>
+
+            <article class="content-box">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=200&fit=crop" alt="Creative Design">
+                <h2>Design Excellence</h2>
+                <p>Great design transcends aesthetics—it's about creating meaningful user experiences. Learn the principles that separate good design from truly exceptional work.</p>
+            </article>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 MyWebsite. All rights reserved. | Designed with ❤️ for modern web experiences.</p>
+    </footer>
+</body>
+</html>

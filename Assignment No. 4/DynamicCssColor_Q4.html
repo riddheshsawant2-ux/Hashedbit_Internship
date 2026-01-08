@@ -1,0 +1,12 @@
+
+<input type="text" id="colorInput" placeholder="Enter a color">
+<p id="text">This is the colourful text</p>
+
+<script>
+    const input = document.getElementById('colorInput');
+    const text = document.getElementById('text');
+
+    input.addEventListener('input', function () {
+        text.style.color = input.value;
+    });
+</script>

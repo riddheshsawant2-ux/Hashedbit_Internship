@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IPL 2022 Points Table</title>
+    <style>
+      body { font-family: 'Times New Roman', Times, serif; padding: 36px; background: #ffffff; color: #000; }
+      .card { max-width: 1100px; margin: 0 auto; background: transparent; padding: 6px; border-radius:0; box-shadow:none; }
+      h1 { margin: 0 0 18px 0; font-size: 56px; font-weight: 700; }
+      table { border-collapse: collapse; width: 100%; margin-top: 14px; }
+      th { text-align: left; padding: 8px 12px; font-size: 22px; font-weight: 700; }
+      td { padding: 6px 12px; font-size: 22px; vertical-align: middle; }
+      td.team { text-align: left; }
+      td.num, th.num { text-align: right; }
+      caption { display: none; }
+      .loading { margin: 16px 0; color:#000; }
+      .note { margin-top:12px; color:#000; font-size:16px; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div id="root"></div>
+    </div>
+
+    <!-- React + ReactDOM UMD builds -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for in-browser JSX (development only) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useEffect, useState } = React;
+
+      function parseNRR(val){
+        if (val === undefined || val === null) return 0;
+        const s = String(val).replace('+','').trim();
+        const f = parseFloat(s);
+        return Number.isFinite(f) ? f : 0;
+      }
+
+      function formatNRR(val){
+        const n = parseNRR(val);
+        return (n > 0 ? `+${n.toFixed(3)}` : n.toFixed(3));
+      }
+
+      function getVal(obj, ...keys){
+        for(const k of keys){
+          if (obj == null) break;
+          if (k in obj) return obj[k];
+          const lower = k.toLowerCase();
+          for(const key of Object.keys(obj)){
+            if (String(key).toLowerCase() === lower) return obj[key];
+          }
+        }
+        return undefined;
+      }
+
+      function initials(name){
+        if (!name) return 'T';
+        const parts = name.split(/\s+/).filter(Boolean);
+        const chars = parts.length === 1 ? parts[0].slice(0,2) : parts.slice(0,2).map(p=>p[0]);
+        return chars.join('').toUpperCase();
+      }
+
+      function colorFromName(name){
+        let hash = 0; for(let i=0;i<name.length;i++) hash = name.charCodeAt(i) + ((hash<<5)-hash);
+        const h = Math.abs(hash) % 360; return `hsl(${h} 60% 45%)`;
+      }
+
+      function App() {
+        const [teams, setTeams] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState(null);
+
+        useEffect(() => {
+          const url = 'https://my-json-server.typicode.com/FreSauce/json-ipl/data';
+          fetch(url)
+            .then(res => {
+              if (!res.ok) throw new Error('Network response was not ok');
+              return res.json();
+            })
+            .then(data => {
+              const arr = Array.isArray(data) ? data : [];
+              const sorted = arr.slice().sort((a,b) => parseNRR(getVal(a,'NRR','nrr')) - parseNRR(getVal(b,'NRR','nrr')));
+              setTeams(sorted);
+            })
+            .catch(err => setError(err.message))
+            .finally(() => setLoading(false));
+        }, []);
+
+        return (
+          <div>
+            <h1>IPL Season 2022 Points</h1>
+            {loading && <div className="loading">Loading data...</div>}
+            {error && <div style={{color:'red'}}>Error: {error}</div>}
+            {!loading && !error && (
+              <div>
+                <table>
+                  <caption>Sorted in ascending order by NRR (lowest → highest)</caption>
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Team</th>
+                      <th className="num">Matches</th>
+                      <th className="num">Won</th>
+                      <th className="num">Lost</th>
+                      <th className="num">Tied</th>
+                      <th className="num">NRR</th>
+                      <th className="num">Points</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {teams.map((t, i) => {
+                      const name = getVal(t,'Team','team') || 'Unknown';
+                      const matches = getVal(t,'Matches','p') ?? getVal(t,'Matches','matches') ?? getVal(t,'P','p') ?? '';
+                      const won = getVal(t,'Won','w') ?? '';
+                      const lost = getVal(t,'Lost','l') ?? '';
+                      const tied = getVal(t,'Tied','t') ?? '';
+                      const nrr = getVal(t,'NRR','nrr') ?? getVal(t,'nrr') ?? 0;
+                      const pts = getVal(t,'Points','pts') ?? '';
+                      const key = getVal(t,'No','no') ?? t.id ?? i;
+                      return (
+                        <tr key={key}>
+                          <td>{getVal(t,'No','no') ?? (i + 1)}</td>
+                          <td className="team">{name}</td>
+                          <td className="num">{matches}</td>
+                          <td className="num">{won}</td>
+                          <td className="num">{lost}</td>
+                          <td className="num">{tied}</td>
+                          <td className="num">{formatNRR(nrr)}</td>
+                          <td className="num">{pts}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <div className="note">Data source: <a href="https://my-json-server.typicode.com/FreSauce/json-ipl/data" target="_blank">API endpoint</a></div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

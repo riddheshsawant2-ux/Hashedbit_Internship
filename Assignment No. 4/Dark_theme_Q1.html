@@ -1,0 +1,16 @@
+<button id="toggleTheme">Toggle Theme</button>
+
+<script>
+  const button = document.getElementById('toggleTheme');
+
+  button.addEventListener('click', function () {
+    document.body.classList.toggle('dark');
+  });
+</script>
+
+<style>
+  body.dark {
+    background-color: black;
+    color: white;
+  }
+</style>

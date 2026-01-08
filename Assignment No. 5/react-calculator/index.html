@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>React Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function Calculator() {
+      const [expr, setExpr] = useState('');
+      const [out, setOut] = useState('0');
+
+      function handleClick(val) {
+        if (val === 'C') {
+          setExpr('');
+          setOut('0');
+          return;
+        }
+        if (val === 'DEL') {
+          const next = expr.slice(0, -1);
+          setExpr(next);
+          return;
+        }
+        if (val === '=') {
+          calculate();
+          return;
+        }
+        setExpr(prev => prev + val);
+      }
+
+      function calculate() {
+        if (!expr) return;
+        try {
+          const sanitized = expr.replace(/[^0-9.+\-*/()%]/g, '');
+          const result = Function('"use strict";return (' + sanitized + ')')();
+          setOut(String(result));
+          setExpr(String(result));
+        } catch (e) {
+          setOut('Error');
+        }
+      }
+
+      const buttons = [
+        ['C', 'DEL', '%', '/'],
+        ['7', '8', '9', '*'],
+        ['4', '5', '6', '-'],
+        ['1', '2', '3', '+'],
+        ['0', '.', '(', ')'],
+        ['=']
+      ];
+
+      return (
+        <div className="calculator">
+          <div className="display">
+            <div className="expr">{expr || '0'}</div>
+            <div className="out">{out}</div>
+          </div>
+          <div className="keys">
+            {buttons.flat().map((b, i) => (
+              <button
+                key={i}
+                className={b === '=' ? 'key-eq' : ''}
+                onClick={() => handleClick(b)}
+              >
+                {b}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Calculator />);
+  </script>
+</body>
+</html>
